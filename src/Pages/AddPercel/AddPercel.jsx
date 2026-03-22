@@ -1,6 +1,11 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const AddPercel = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -15,26 +20,140 @@ const AddPercel = () => {
 
   const parcelType = watch("parcelType");
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const axiosSecure = useAxiosSecure();
+
+  const onSubmit = async (data) => {
+    try {
+      const isSameCity = data.senderWirehouse === data.receiverWirehouse;
+
+      const weight = parseFloat(data.parcelWeight);
+
+      // 🔥 Cost Calculation
+      let cost = 0;
+
+      if (data.parcelType === "document") {
+        cost = isSameCity ? 60 : 80;
+      } else {
+        if (weight <= 3) {
+          cost = isSameCity ? 110 : 150;
+        } else {
+          const extraWeight = weight - 3;
+          const extraCost = extraWeight * 40;
+
+          cost = isSameCity ? 110 + extraCost : 150 + extraCost + 40;
+        }
+      }
+
+      // 🔥 Tracking ID
+      const trackingId = "TRK-" + Date.now();
+
+      const finalData = {
+        ...data,
+        cost,
+        trackingId,
+        status: "pending",
+        createdAt: new Date(),
+      };
+
+      // 🔥 Send to server
+      const res = await axiosSecure.post("/parcels", finalData);
+
+      if (res.data) {
+        // 🎨 Awesome Design Card
+        const result = await Swal.fire({
+          title: "🎉 Parcel বুকিং সফল!",
+          html: `
+          <div style="
+            text-align:left;
+            padding:15px;
+            border-radius:10px;
+            background:#f9fafb;
+            font-size:14px;
+          ">
+            <div style="margin-bottom:10px;">
+              <span style="color:gray;">Tracking ID</span><br/>
+              <b style="color:#16a34a;">${trackingId}</b>
+            </div>
+
+            <div style="display:flex; justify-content:space-between;">
+              <div>
+                <span style="color:gray;">Type</span><br/>
+                <b>${data.parcelType}</b>
+              </div>
+              <div>
+                <span style="color:gray;">Weight</span><br/>
+                <b>${weight} kg</b>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <span style="color:gray;">Delivery</span><br/>
+              <b>${isSameCity ? "Within City 🚚" : "Outside City 🌍"}</b>
+            </div>
+
+            <hr style="margin:15px 0"/>
+
+            <div style="text-align:center;">
+              <span style="color:gray;">Total Cost</span><br/>
+              <h2 style="color:#2563eb; margin:5px 0;">
+                ৳ ${cost}
+              </h2>
+            </div>
+          </div>
+        `,
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: "💳 Proceed to Payment",
+          cancelButtonText: "❌ Cancel",
+          confirmButtonColor: "#22c55e",
+          cancelButtonColor: "#ef4444",
+        });
+
+        // 👉 Proceed button click
+        if (result.isConfirmed) {
+          // ✅ Success message
+          await Swal.fire({
+            title: "Redirecting...",
+            text: "Taking you to payment page",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+
+          // 🚀 Navigate
+          navigate("/percelPayment", {
+            state: { trackingId, cost, data: finalData },
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "Something went wrong",
+        icon: "error",
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center py-10 px-4">
+    <div className="min-h-screen bg-gray-50 flex justify-center py-10 md:px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-5xl bg-white rounded-2xl shadow border p-8"
       >
         <h1 className="text-4xl font-bold mb-12">Add Parcel</h1>
 
-        <h1 className="text-2xl font-bold mb-6">
-          Enter your parcel details
-        </h1>
+        <h1 className="text-2xl font-bold mb-6">Enter your parcel details</h1>
 
         {/* Parcel Type */}
         <div className="flex gap-6 mb-8">
           {["document", "not-document"].map((type) => (
-            <label key={type} className="flex items-center gap-2 cursor-pointer">
+            <label
+              key={type}
+              className="flex items-center gap-2 cursor-pointer"
+            >
               <input
                 type="radio"
                 value={type}
@@ -56,9 +175,7 @@ const AddPercel = () => {
           ))}
         </div>
         {errors.parcelType && (
-          <p className="text-red-500 text-sm mb-4">
-            Parcel Type is required
-          </p>
+          <p className="text-red-500 text-sm mb-4">Parcel Type is required</p>
         )}
 
         {/* Parcel Info */}
@@ -66,7 +183,9 @@ const AddPercel = () => {
           <div>
             <p className="text-sm font-semibold mb-1">Parcel Name</p>
             <input
-              {...register("parcelName", { required: "Parcel Name is Required" })}
+              {...register("parcelName", {
+                required: "Parcel Name is Required",
+              })}
               className="w-full border px-3 py-2 rounded"
               placeholder="Parcel Name"
             />
@@ -81,7 +200,9 @@ const AddPercel = () => {
             <p className="text-sm font-semibold mb-1">Parcel Weight (KG)</p>
             <input
               type="number"
-              {...register("parcelWeight", { required: "Parcel Weight is Required" })}
+              {...register("parcelWeight", {
+                required: "Parcel Weight is Required",
+              })}
               className="w-full border px-3 py-2 rounded"
               placeholder="Weight"
             />
@@ -103,7 +224,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Sender Name</p>
                   <input
-                    {...register("senderName", { required: "Sender Name is Required" })}
+                    {...register("senderName", {
+                      required: "Sender Name is Required",
+                    })}
                     placeholder="Sender Name"
                     className="border px-3 py-2 rounded w-full"
                   />
@@ -117,7 +240,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Wirehouse</p>
                   <select
-                    {...register("senderWirehouse", { required: "Wirehouse is Required" })}
+                    {...register("senderWirehouse", {
+                      required: "Wirehouse is Required",
+                    })}
                     className="border px-3 py-2 rounded w-full"
                   >
                     <option value="">Select Wirehouse</option>
@@ -137,7 +262,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Address</p>
                   <input
-                    {...register("senderAddress", { required: "Sender Address is Required" })}
+                    {...register("senderAddress", {
+                      required: "Sender Address is Required",
+                    })}
                     placeholder="Address"
                     className="border px-3 py-2 rounded w-full"
                   />
@@ -151,7 +278,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Contact No</p>
                   <input
-                    {...register("senderContact", { required: "Contact No is Required" })}
+                    {...register("senderContact", {
+                      required: "Contact No is Required",
+                    })}
                     placeholder="Phone"
                     className="border px-3 py-2 rounded w-full"
                   />
@@ -166,7 +295,9 @@ const AddPercel = () => {
               <div>
                 <p className="text-sm font-semibold mb-1">Region</p>
                 <select
-                  {...register("senderRegion", { required: "Region is Required" })}
+                  {...register("senderRegion", {
+                    required: "Region is Required",
+                  })}
                   className="border px-3 py-2 rounded w-full"
                 >
                   <option value="">Select Region</option>
@@ -182,9 +313,7 @@ const AddPercel = () => {
               </div>
 
               <div>
-                <p className="text-sm font-semibold mb-1">
-                  Pickup Instruction
-                </p>
+                <p className="text-sm font-semibold mb-1">Pickup Instruction</p>
                 <textarea
                   {...register("pickupInstruction", {
                     required: "Pickup Instruction is Required",
@@ -210,7 +339,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Receiver Name</p>
                   <input
-                    {...register("receiverName", { required: "Receiver Name is Required" })}
+                    {...register("receiverName", {
+                      required: "Receiver Name is Required",
+                    })}
                     placeholder="Receiver Name"
                     className="border px-3 py-2 rounded w-full"
                   />
@@ -224,7 +355,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Wirehouse</p>
                   <select
-                    {...register("receiverWirehouse", { required: "Wirehouse is Required" })}
+                    {...register("receiverWirehouse", {
+                      required: "Wirehouse is Required",
+                    })}
                     className="border px-3 py-2 rounded w-full"
                   >
                     <option value="">Select Wirehouse</option>
@@ -244,7 +377,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Address</p>
                   <input
-                    {...register("receiverAddress", { required: "Receiver Address is Required" })}
+                    {...register("receiverAddress", {
+                      required: "Receiver Address is Required",
+                    })}
                     placeholder="Address"
                     className="border px-3 py-2 rounded w-full"
                   />
@@ -258,7 +393,9 @@ const AddPercel = () => {
                 <div>
                   <p className="text-sm font-semibold mb-1">Contact No</p>
                   <input
-                    {...register("receiverContact", { required: "Contact No is Required" })}
+                    {...register("receiverContact", {
+                      required: "Contact No is Required",
+                    })}
                     placeholder="Phone"
                     className="border px-3 py-2 rounded w-full"
                   />
@@ -273,7 +410,9 @@ const AddPercel = () => {
               <div>
                 <p className="text-sm font-semibold mb-1">Region</p>
                 <select
-                  {...register("receiverRegion", { required: "Region is Required" })}
+                  {...register("receiverRegion", {
+                    required: "Region is Required",
+                  })}
                   className="border px-3 py-2 rounded w-full"
                 >
                   <option value="">Select Region</option>

@@ -1,21 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
 import useAuth from "../../../Hooks/UseAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const {user, logOut} = useAuth();
-  console.log(user?.email)
+  const { user, logOut } = useAuth();
+  console.log(user?.email);
 
   // toggle dropdown on click
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
-    const handleLogout = () => {
+  const handleLogout = () => {
     logOut()
       .then(() => {
         console.log("Logged out successfully");
+        Swal.fire({
+          title: "Logged out successfully!",
+          text: "You have logout successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+          position: "center",
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -47,32 +55,31 @@ const Navbar = () => {
             <span></span>
           </div>
 
-         <div>
-      {user?.email ? (
-        // 👉 if user logged in 
-        <button
-          onClick={handleLogout}
-          className="text-white bg-red-600 py-1.5 px-4 rounded font-bold"
-        >
-          Logout
-        </button>
-      ) : (
-        // 👉 if user isnot logged in
-        <NavLink
-          to="/login"
-          className="text-white bg-purple-700 py-1.5 pl-3 pr-4 rounded font-bold"
-        >
-          Login
-        </NavLink>
-      )}
-    </div>
+          <div>
+            {user?.email ? (
+              // 👉 if user logged in
+              <button
+                onClick={handleLogout}
+                className="text-white bg-red-600 py-1.5 px-4 rounded font-bold cursor-pointer"
+              >
+                Logout
+              </button>
+            ) : (
+              // 👉 if user isnot logged in
+              <NavLink
+                to="/login"
+                className="text-white bg-purple-700 py-1.5 pl-3 pr-4 rounded font-bold cursor-pointer"
+              >
+                Login
+              </NavLink>
+            )}
+          </div>
           <NavLink
             to="/rider"
             className="bg-[#CAEB66] py-1.5 pl-3 ml-2 pr-4 rounded-sm font-bold"
           >
             Be a rider
           </NavLink>
-      
 
           <button
             onClick={() => setOpen(!open)}
@@ -175,7 +182,7 @@ const Navbar = () => {
               {/* Button */}
               <button
                 onClick={handleToggle}
-                className="px-4 py-2 bg-gray-200 rounded"
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-lime-300"
               >
                 Pages
               </button>

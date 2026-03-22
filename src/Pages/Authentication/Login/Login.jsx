@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import useAuth from "../../../Hooks/UseAuth";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -15,18 +16,34 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    signIn(data.email, data.password)
-    .then(result =>{
-      console.log(result.user)
-      navigate("/");
+const onSubmit = (data) => {
+  // console.log("Form Data:", data);
 
+  signIn(data.email, data.password)
+    .then((result) => {
+      console.log(result.user);
+
+      Swal.fire({
+        title: "Login Successful!",
+        text: "You have logged in successfully",
+        icon: "success",
+        confirmButtonText: "OK",
+        position: "center",
+      });
+
+      navigate("/");
     })
-    .catch(error => {
-      console.log(error)
-    })
-  };
+    .catch((error) => {
+      console.log(error);
+
+      Swal.fire({
+        title: "Login Failed!",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    });
+};
 
   return (
     <div className=" px-4">

@@ -14,6 +14,8 @@ import Pricing from "../Pages/Pricing/Pricing";
 import Coverage from "../Pages/Coverage/Coverage";
 import AddPercel from "../Pages/AddPercel/AddPercel";
 import TrackConsignment from "../Pages/TrackConsignment/TrackConsignment";
+import PercelPayment from "../Pages/AddPercel/PercelPayment";
+import DashboardLayout from "../Layout/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +51,20 @@ const router = createBrowserRouter([
         path: "trackConsignment",
         Component: TrackConsignment,
       },
+      {
+        path: "percelPayment",
+        Component: PercelPayment,
+      },
     ],
+  },
+  {
+    path: "/dashboard",
+    Component: DashboardLayout,
+    children: [
+      {
+
+      }
+    ]
   },
   {
     path: "/",
