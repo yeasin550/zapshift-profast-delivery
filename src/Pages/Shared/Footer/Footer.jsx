@@ -173,11 +173,11 @@ const Footer = () => {
               </a>
               <a
                 href="javascript:;"
-                className="relative w-8 h-8 rounded-full transition-all duration-500 flex justify-center items-center bg-[linear-gradient(45deg,#FEE411_6.9%,#FEDB16_10.98%,#FEC125_17.77%,#FE983D_26.42%,#FE5F5E_36.5%,#FE2181_46.24%,#9000DC_85.57%)]  hover:bg-gradient-to-b from-gray-900 to-gray-900  
+                className="relative w-8 h-8 rounded-full transition-all duration-500 flex justify-center items-center bg-[linear-gradient(45deg,#FEE411_6.9%,#FEDB16_10.98%,#FEC125_17.77%,#FE983D_26.42%,#FE5F5E_36.5%,#FE2181_46.24%,#9000DC_85.57%)]  hover:bg-linear-to-b from-gray-900 to-gray-900  
                         "
               >
                 <svg
-                  className="w-[1.25rem] h-[1.125rem] text-white"
+                  className="w-5 h-4.5 text-white"
                   viewBox="0 0 16 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +193,7 @@ const Footer = () => {
                 className="relative w-8 h-8 rounded-full transition-all duration-500 flex justify-center items-center bg-[#337FFF]  hover:bg-gray-900 "
               >
                 <svg
-                  className="w-[1rem] h-[1rem] text-white"
+                  className="w-4 h-4 text-white"
                   viewBox="0 0 8 14"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +209,7 @@ const Footer = () => {
                 className="relative w-8 h-8 rounded-full transition-all duration-500 flex justify-center items-center bg-[#FF0000]  hover:bg-gray-900 "
               >
                 <svg
-                  className="w-[1.25rem] h-[0.875rem] text-white"
+                  className="w-5 h-3.5 text-white"
                   viewBox="0 0 16 12"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

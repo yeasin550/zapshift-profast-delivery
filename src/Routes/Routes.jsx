@@ -12,60 +12,70 @@ import BeRider from "../Pages/BeRider/BeRider";
 import Error from "../Components/Error/Error";
 import Pricing from "../Pages/Pricing/Pricing";
 import Coverage from "../Pages/Coverage/Coverage";
+import AddPercel from "../Pages/AddPercel/AddPercel";
+import TrackConsignment from "../Pages/TrackConsignment/TrackConsignment";
 
 const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    Component: Main,
+    errorElement: <Error />,
+    children: [
+      {
         path: "/",
-        Component: Main,
-        errorElement: <Error/>,
-        children: [
-            {
-                path: "/",
-                Component: Home
-            },
-            {
-                path: "about",
-                Component: About
-            },
-            {
-                path: "coverage",
-                Component: Coverage
-            },
-            {
-                path: "pricing",
-                Component: Pricing
-            },
-            {
-                path: "rider",
-                Component: BeRider
-            }
-        ]
-    },
-    {
-        path: "/",
-        Component: AuthLayout,
-        children: [
-            {
-                path: "login",
-                Component: Login,
-            },
-            {
-                path: "register",
-                Component: Register,
-            },
-            {
-                path: "forgot-password",
-                Component: ForgotPassword,
-            },
-            {
-                path: "otp-verify",
-                Component: OTPVerify,
-            },
-            {
-                path: "reset-password",
-                Component: ResetPassword,
-            }
-        ]
-    }
+        Component: Home,
+      },
+      {
+        path: "about",
+        Component: About,
+      },
+      {
+        path: "coverage",
+        Component: Coverage,
+      },
+      {
+        path: "pricing",
+        Component: Pricing,
+      },
+      {
+        path: "rider",
+        Component: BeRider,
+      },
+      {
+        path: "addPercel",
+        Component: AddPercel,
+      },
+      {
+        path: "trackConsignment",
+        Component: TrackConsignment,
+      },
+    ],
+  },
+  {
+    path: "/",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
+      },
+      {
+        path: "forgot-password",
+        Component: ForgotPassword,
+      },
+      {
+        path: "otp-verify",
+        Component: OTPVerify,
+      },
+      {
+        path: "reset-password",
+        Component: ResetPassword,
+      },
+    ],
+  },
 ]);
 export default router;

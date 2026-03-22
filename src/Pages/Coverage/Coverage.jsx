@@ -1,7 +1,7 @@
-import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useState, useRef, useEffect } from "react";
 
 // Fix marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -12,21 +12,53 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-// ✅ FIX: correct import (move json to src/data হলে better)
+// ✅ better: move JSON to src/data
 import coverageData from "../../../public/data/warehouses.json";
 
 const Coverage = () => {
   const [search, setSearch] = useState("");
+  const mapRef = useRef(null);
 
-  // ✅ filter working
+  // filter
   const filteredData = coverageData.filter((item) =>
-    item.district.toLowerCase().includes(search.toLowerCase()),
+    item.district.toLowerCase().includes(search.toLowerCase())
   );
 
+  // auto zoom when typing
+useEffect(() => {
+  if (filteredData.length > 0 && mapRef.current) {
+    const bounds = filteredData.map(item => [
+      item.latitude,
+      item.longitude
+    ]);
+
+    mapRef.current.fitBounds(bounds, {
+      padding: [50, 50], // margin
+      animate: true,
+    });
+  }
+}, [search, filteredData]);
+
+  // button click zoom
+const handleSearch = () => {
+  if (filteredData.length > 0 && mapRef.current) {
+    const bounds = filteredData.map(item => [
+      item.latitude,
+      item.longitude
+    ]);
+
+    mapRef.current.fitBounds(bounds, {
+      padding: [50, 50],
+      animate: true,
+    });
+  }
+};
   return (
     <div className="mb-12">
       <div className="my-12 space-y-8">
-        <h1 className="text-3xl font-bold">We are available in 64 districts</h1>
+        <h1 className="text-3xl font-bold">
+          We are available in 64 districts
+        </h1>
 
         <div>
           <input
@@ -36,7 +68,11 @@ const Coverage = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button className="bg-lime-400 font-bold py-2 px-8 -ml-10 rounded-full border">
+
+          <button
+            onClick={handleSearch}
+            className="bg-lime-400 font-bold py-2 px-8 -ml-10 rounded-full border"
+          >
             Search
           </button>
         </div>
@@ -56,20 +92,24 @@ const Coverage = () => {
             zoom={7}
             scrollWheelZoom={true}
             className="h-full w-full"
+            whenCreated={(map) => (mapRef.current = map)}
           >
+            {/* ✅ MUST be inside MapContainer */}
             <TileLayer
               attribution="&copy; OpenStreetMap"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* ✅ USE filteredData */}
             {filteredData.map((item, index) => (
-              <Marker key={index} position={[item.latitude, item.longitude]}>
+              <Marker
+                key={index}
+                position={[item.latitude, item.longitude]}
+              >
                 <Popup>
                   <div>
                     <h2 className="font-bold">{item.district}</h2>
                     <p>Status: {item.status}</p>
-                    <p>Areas: {item.covered_area.join(", ")}</p>
+                    <p>{item.covered_area.join(", ")}</p>
                   </div>
                 </Popup>
               </Marker>

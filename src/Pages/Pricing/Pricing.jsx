@@ -25,8 +25,8 @@ const Pricing = () => {
       <h1 className="text-3xl font-bold text-center my-12">
         Calculate Your Cost
       </h1>
-      <div className="flex items-center mt-12 mb-20 px-12">
-        <div className="w-1/2">
+      <div className="md:flex items-center mt-12 mb-20 px-12">
+        <div className="md:w-1/2">
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             <div className="">
@@ -95,7 +95,7 @@ const Pricing = () => {
           </form>
         </div>
 
-        <div className="w-1/2 text-9xl font-bold text-center">50 Tk</div>
+        <div className="md:w-1/2 md:text-9xl text-8xl font-bold text-center">50 Tk</div>
       </div>
     </div>
   );
