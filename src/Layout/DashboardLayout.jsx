@@ -7,7 +7,7 @@ const DashboardLayout = () => {
   const { user } = useAuth();
 
   const menu = [
-    // { name: "Dashboard", path: "/dashboard" },
+    { name: "Home", path: "/" },
     { name: "My Parcel", path: "/dashboard/myParcel" },
     { name: "My Payment", path: "/dashboard/mypayment" },
   ];

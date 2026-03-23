@@ -74,12 +74,12 @@ const Navbar = () => {
               </NavLink>
             )}
           </div>
-          <NavLink
+          {/* <NavLink
             to="/rider"
             className="bg-lime-300 py-1.5 pl-3 ml-2 pr-4 rounded-sm font-bold"
           >
             Be a rider
-          </NavLink>
+          </NavLink> */}
 
           <button
             onClick={() => setOpen(!open)}
