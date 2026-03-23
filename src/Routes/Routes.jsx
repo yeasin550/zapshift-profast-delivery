@@ -12,10 +12,11 @@ import BeRider from "../Pages/BeRider/BeRider";
 import Error from "../Components/Error/Error";
 import Pricing from "../Pages/Pricing/Pricing";
 import Coverage from "../Pages/Coverage/Coverage";
-import AddPercel from "../Pages/AddPercel/AddPercel";
+import AddParcel from "../Pages/AddPercel/AddParcel";
 import TrackConsignment from "../Pages/TrackConsignment/TrackConsignment";
-import PercelPayment from "../Pages/AddPercel/PercelPayment";
 import DashboardLayout from "../Layout/DashboardLayout";
+import MyParcel from "../Pages/Dashboard/MyParcel/MyParcel";
+import ParcelPayment from "../Pages/AddPercel/ParcelPayment";
 
 const router = createBrowserRouter([
   {
@@ -44,17 +45,14 @@ const router = createBrowserRouter([
         Component: BeRider,
       },
       {
-        path: "addPercel",
-        Component: AddPercel,
+        path: "addParcel",
+        Component: AddParcel,
       },
       {
         path: "trackConsignment",
         Component: TrackConsignment,
       },
-      {
-        path: "percelPayment",
-        Component: PercelPayment,
-      },
+
     ],
   },
   {
@@ -62,7 +60,12 @@ const router = createBrowserRouter([
     Component: DashboardLayout,
     children: [
       {
-
+        path: "myParcel",
+        Component: MyParcel,
+      },
+      {
+        path: "myPayment",
+        Component: ParcelPayment,
       }
     ]
   },

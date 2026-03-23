@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import useAuth from "../../Hooks/UseAuth";
 
-const AddPercel = () => {
+const AddParcel = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -53,6 +55,7 @@ const AddPercel = () => {
         trackingId,
         status: "pending",
         createdAt: new Date(),
+        userEmail: user?.email,
       };
 
       // 🔥 Send to server
@@ -246,9 +249,22 @@ const AddPercel = () => {
                     className="border px-3 py-2 rounded w-full"
                   >
                     <option value="">Select Wirehouse</option>
-                    <option>Dhaka</option>
-                    <option>Chattogram</option>
-                    <option>Sylhet</option>
+
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Chattogram">Chattogram</option>
+                    <option value="Sylhet">Sylhet</option>
+
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Barishal">Barishal</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Mymensingh">Mymensingh</option>
+
+                    <option value="Comilla">Comilla</option>
+                    <option value="Narayanganj">Narayanganj</option>
+                    <option value="Gazipur">Gazipur</option>
+                    <option value="Jessore">Jessore</option>
+                    <option value="Cox's Bazar">Cox's Bazar</option>
                   </select>
                   {errors.senderWirehouse && (
                     <p className="text-red-500 text-sm">
@@ -301,9 +317,16 @@ const AddPercel = () => {
                   className="border px-3 py-2 rounded w-full"
                 >
                   <option value="">Select Region</option>
-                  <option>Dhaka Division</option>
-                  <option>Chattogram Division</option>
-                  <option>Sylhet Division</option>
+
+                  <option value="dhaka">Dhaka Division</option>
+                  <option value="chattogram">Chattogram Division</option>
+                  <option value="sylhet">Sylhet Division</option>
+
+                  <option value="rajshahi">Rajshahi Division</option>
+                  <option value="khulna">Khulna Division</option>
+                  <option value="barishal">Barishal Division</option>
+                  <option value="rangpur">Rangpur Division</option>
+                  <option value="mymensingh">Mymensingh Division</option>
                 </select>
                 {errors.senderRegion && (
                   <p className="text-red-500 text-sm">
@@ -361,9 +384,22 @@ const AddPercel = () => {
                     className="border px-3 py-2 rounded w-full"
                   >
                     <option value="">Select Wirehouse</option>
-                    <option>Dhaka</option>
-                    <option>Chattogram</option>
-                    <option>Sylhet</option>
+
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Chattogram">Chattogram</option>
+                    <option value="Sylhet">Sylhet</option>
+
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Barishal">Barishal</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Mymensingh">Mymensingh</option>
+
+                    <option value="Comilla">Comilla</option>
+                    <option value="Narayanganj">Narayanganj</option>
+                    <option value="Gazipur">Gazipur</option>
+                    <option value="Jessore">Jessore</option>
+                    <option value="Cox's Bazar">Cox's Bazar</option>
                   </select>
                   {errors.receiverWirehouse && (
                     <p className="text-red-500 text-sm">
@@ -416,9 +452,16 @@ const AddPercel = () => {
                   className="border px-3 py-2 rounded w-full"
                 >
                   <option value="">Select Region</option>
-                  <option>Dhaka Division</option>
-                  <option>Chattogram Division</option>
-                  <option>Sylhet Division</option>
+
+                  <option value="dhaka">Dhaka Division</option>
+                  <option value="chattogram">Chattogram Division</option>
+                  <option value="sylhet">Sylhet Division</option>
+
+                  <option value="rajshahi">Rajshahi Division</option>
+                  <option value="khulna">Khulna Division</option>
+                  <option value="barishal">Barishal Division</option>
+                  <option value="rangpur">Rangpur Division</option>
+                  <option value="mymensingh">Mymensingh Division</option>
                 </select>
                 {errors.receiverRegion && (
                   <p className="text-red-500 text-sm">
@@ -461,4 +504,4 @@ const AddPercel = () => {
   );
 };
 
-export default AddPercel;
+export default AddParcel;

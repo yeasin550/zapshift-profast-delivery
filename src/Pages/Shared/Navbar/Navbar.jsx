@@ -76,7 +76,7 @@ const Navbar = () => {
           </div>
           <NavLink
             to="/rider"
-            className="bg-[#CAEB66] py-1.5 pl-3 ml-2 pr-4 rounded-sm font-bold"
+            className="bg-lime-300 py-1.5 pl-3 ml-2 pr-4 rounded-sm font-bold"
           >
             Be a rider
           </NavLink>
@@ -117,7 +117,7 @@ const Navbar = () => {
 
             <li>
               <NavLink
-                to="/addPercel"
+                to="/addParcel"
                 className={({ isActive }) =>
                   `block py-1.5 pl-3 pr-4 text-black rounded ${
                     isActive ? "bg-purple-700 text-white" : "hover:bg-lime-300"
@@ -165,6 +165,18 @@ const Navbar = () => {
               </NavLink>
             </li> */}
 
+            <li>
+              <NavLink
+                to="/dashboard/myParcel"
+                className={({ isActive }) =>
+                  `block py-1.5 pl-3 pr-4 text-black rounded ${
+                    isActive ? "bg-purple-700 text-white" : "hover:bg-lime-300"
+                  }`
+                }
+              >
+                Dashboard
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="/rider"

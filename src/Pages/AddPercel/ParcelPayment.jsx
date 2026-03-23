@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 
-const PercelPayment = () => {
-  const navigate = useNavigate();
+const ParcelPayment = () => {
+  // const navigate = useNavigate();
 
   // 🔥 Static Dummy Data (পরে তুমি change করবে)
   // const trackingId = "TRK-98456321";
@@ -70,7 +70,7 @@ const PercelPayment = () => {
           <button
             onClick={() => {
               alert("Payment Successful 🎉");
-              navigate("/");
+              // navigate("/");
             }}
             className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition"
           >
@@ -78,7 +78,8 @@ const PercelPayment = () => {
           </button>
 
           <button
-            onClick={() => navigate(-1)}
+            // onClick={() => navigate(-1)}
+   
             className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-semibold transition"
           >
             Cancel ❌
@@ -94,4 +95,4 @@ const PercelPayment = () => {
   );
 };
 
-export default PercelPayment;
+export default ParcelPayment;
