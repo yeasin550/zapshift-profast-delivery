@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router";
-import useAuth from "../../../Hooks/UseAuth";
+
 import Swal from "sweetalert2";
+import useAuth from "../../../Hooks/useAuth";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logOut } = useAuth();
-  console.log(user?.email);
+  // console.log(user?.email);
 
   // toggle dropdown on click
   const handleToggle = () => {
@@ -62,7 +63,7 @@ const Navbar = () => {
                 onClick={handleLogout}
                 className="text-white bg-red-600 py-1.5 px-4 rounded font-bold cursor-pointer"
               >
-                Logout
+                LogOut
               </button>
             ) : (
               // 👉 if user isnot logged in

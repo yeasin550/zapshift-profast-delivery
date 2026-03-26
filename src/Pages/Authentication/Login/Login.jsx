@@ -2,13 +2,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import useAuth from "../../../Hooks/UseAuth";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const {signIn} = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
 
   const {
     register,
@@ -31,7 +33,7 @@ const onSubmit = (data) => {
         position: "center",
       });
 
-      navigate("/");
+      navigate(from);
     })
     .catch((error) => {
       console.log(error);

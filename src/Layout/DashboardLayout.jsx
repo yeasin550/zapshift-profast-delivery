@@ -9,7 +9,7 @@ const DashboardLayout = () => {
   const menu = [
     { name: "Home", path: "/" },
     { name: "My Parcel", path: "/dashboard/myParcel" },
-    { name: "My Payment", path: "/dashboard/mypayment" },
+    // { name: "My Payment", path: "/dashboard/payment" },
   ];
 
   return (
