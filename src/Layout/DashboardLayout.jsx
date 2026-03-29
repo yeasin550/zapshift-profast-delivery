@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router";
-import useAuth from "../Hooks/UseAuth";
+import useAuth from "../Hooks/useAuth";
+import { FaBox, FaHome, FaMoneyBill, FaSearch, FaUser } from "react-icons/fa";
+
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
 
   const menu = [
-    { name: "Home", path: "/" },
-    { name: "My Parcel", path: "/dashboard/myParcel" },
-    // { name: "My Payment", path: "/dashboard/payment" },
+ { name: "Home", path: "/", icon: <FaHome /> },
+  { name: "Profile", path: "/dashboard/profile", icon: <FaUser /> },
+  { name: "My Parcel", path: "/dashboard/myParcel", icon: <FaBox /> },
+  { name: "Payment History", path: "/dashboard/paymentHistory", icon: <FaMoneyBill /> },
+  { name: "Track Parcel", path: "/dashboard/trackParcal", icon: <FaSearch /> },
   ];
 
   return (
@@ -28,22 +32,23 @@ const DashboardLayout = () => {
         <p className="text-sm text-gray-400 text-center">{user?.email}</p>
 
         {/* Menu */}
-        <div className="p-4 space-y-2">
-          {menu.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                `block px-4 py-2 rounded-lg transition ${
-                  isActive ? "bg-indigo-500 text-white" : "hover:bg-gray-800"
-                }`
-              }
-            >
-              {item.name}
-            </NavLink>
-          ))}
-        </div>
+<div className="p-4 space-y-2">
+  {menu.map((item) => (
+    <NavLink
+      key={item.path}
+      to={item.path}
+      onClick={() => setOpen(false)}
+      className={({ isActive }) =>
+        `flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+          isActive ? "bg-indigo-500 text-white" : "hover:bg-gray-800"
+        }`
+      }
+    >
+      {item.icon}
+      {item.name}
+    </NavLink>
+  ))}
+</div>
       </div>
 
       {/* 🔥 Overlay */}

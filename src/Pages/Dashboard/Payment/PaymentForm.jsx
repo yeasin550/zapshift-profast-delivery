@@ -3,9 +3,10 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 const PaymentForm = () => {
   const { user } = useAuth();
@@ -14,6 +15,7 @@ const PaymentForm = () => {
   const [error, setError] = useState("");
   const { parcelId } = useParams();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   const { isPending, data: parcelInfo = {} } = useQuery({
     queryKey: ["parcels", parcelId],
@@ -147,14 +149,33 @@ const PaymentForm = () => {
       if (paymentIntent.status === "succeeded") {
         console.log("Payment Success:", paymentIntent);
 
-        // ✅ optional DB update
-        // await axiosSecure.patch(`/parcels/${parcelId}`, {
-        //   status: "paid",
-        //   transactionId: paymentIntent.id,
-        // });
-       
+        // 🔥 1. Update parcel status (pending → paid)
+        await axiosSecure.patch(`/parcels/${parcelId}`, {
+          transactionId: paymentIntent.id,
+        });
+
+        // 💾 2. Save payment history
+        const paymentData = {
+          parcelId,
+          email: user?.email,
+          amount: amountInCent / 100,
+          transactionId: paymentIntent.id,
+          status: "paid",
+          date: new Date(),
+        };
+
+        await axiosSecure.post("/payments", paymentData);
+
+        // 🔄 3. Update UI instantly (React state optional)
         setError("");
-        alert("Payment Successful 🎉");
+        Swal.fire({
+          title: "Payment Successful 🎉",
+          text: "Your parcel payment has been completed successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#6366f1",
+        });
+        navigate("/dashboard/myParcel")
       }
     } catch (err) {
       console.log("Server Error:", err.message);

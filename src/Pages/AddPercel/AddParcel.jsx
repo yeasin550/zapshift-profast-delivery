@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
-import useAuth from "../../Hooks/UseAuth";
+import useAuth from "../../Hooks/useAuth";
 
 const AddParcel = () => {
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ const AddParcel = () => {
           });
 
           // 🚀 Navigate
-          navigate("/percelPayment", {
+          navigate("/payment", {
             state: { trackingId, cost, data: finalData },
           });
         }
@@ -487,6 +487,7 @@ const AddParcel = () => {
                   </p>
                 )}
               </div>
+
             </div>
           </div>
         </div>
